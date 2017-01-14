@@ -1,0 +1,108 @@
+# secure management endpoints
+management:
+  security:
+    enabled: true
+    sessions: stateless
+    role: ADMIN
+    # forward compatibility
+    roles: ${management.security.role}
+  context-path: /management
+security:
+  basic:
+    enabled: true
+    path: ${management.context-path}/**
+  user:
+    name: "{cipher}bf82b6e12915fa6cdc4a06134bd0b3dde3c44ff7c20b88ba457f3bdb4358e74d"
+    password: "{cipher}889a5814b044285a601d8e0bf2f44d37f7b8db8878cca0aac5e601afedb200e2"
+    role: ${management.security.role}
+  sessions: ${management.security.sessions}
+---
+spring.profiles: oauth2-resource-default
+security:
+  basic:
+    enabled: false
+  oauth2:
+    resource:
+      # If SSL is turned on in the UAA application, you must change/override the 'user-info-uri' property below
+      #   to use 'https://' instead of 'http://'. You must also change/override the port number in the URL.
+      user-info-uri: http://localhost:8080/uaa/userinfo
+      jwt:
+        keyValue:
+                         -----BEGIN PUBLIC KEY-----
+                         MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0m59l2u9iDnMbrXHfqkO
+                         rn2dVQ3vfBJqcDuFUK03d+1PZGbVlNCqnkpIJ8syFppW8ljnWweP7+LiWpRoz0I7
+                         fYb3d8TjhV86Y997Fl4DBrxgM6KTJOuE/uxnoDhZQ14LgOU2ckXjOzOdTsnGMKQB
+                         LCl0vpcXBtFLMaSbpv1ozi8h7DJyVZ6EnFQZUWGdgTMhDrmqevfx95U/16c5WBDO
+                         kqwIn7Glry9n9Suxygbf8g5AzpWcusZgDLIIZ7JTUldBb8qU2a0Dl4mvLZOn4wPo
+                         jfj9Cw2QICsc5+Pwf21fP+hzf+1WSRHbnYv8uanRO0gZ8ekGaghM/2H6gqJbo2nI
+                         JwIDAQAB
+                         -----END PUBLIC KEY-----
+---
+spring.profiles: eureka-client
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+---
+spring.profiles: mysql
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    validation-query: select 1
+    test-on-borrow: true
+    test-on-return: true
+    test-while-idle: true
+    time-between-eviction-runs-millis: 1800000
+    num-tests-per-eviction-run: 3
+    min-evictable-idle-time-millis: 1800000
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        hbm2ddl:
+          auto: validate
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    show-sql: false
+---
+spring.profiles: h2
+spring:
+  datasource:
+    username: sa
+    password:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        hbm2ddl:
+          auto: validate
+    hibernate:
+      ddl-auto: none
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    show-sql: false
+---
+spring.profiles: ssl
+server:
+  ssl:
+    ciphers: "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"
+    enabledProtocols: "TLSv1.1,TLSv1.2"
+eureka:
+  instance:
+    secure-port: ${server.port}
+    secure-port-enabled: true
+    non-secure-port-enabled: false
+---
+spring.profiles: ssl-bhitsqaapp02
+spring.profiles.include: ssl
+server:
+  ssl:
+    key-store: /java/tomcat_ssl.keystore
+    key-store-password: "{cipher}5f49b5acf4f4a042aca3fac3727c1f5c3e665c0b2756afca2e33af9e50ca6e29"
+---
+spring.profiles: ssl-bhitsqaapplnx01
+spring.profiles.include: ssl
+server:
+  ssl:
+    key-store: /java/keystore/linuxqa.keystore
+    key-store-password: "{cipher}5f49b5acf4f4a042aca3fac3727c1f5c3e665c0b2756afca2e33af9e50ca6e29"

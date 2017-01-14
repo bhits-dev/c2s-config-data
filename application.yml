@@ -92,17 +92,3 @@ eureka:
     secure-port: ${server.port}
     secure-port-enabled: true
     non-secure-port-enabled: false
----
-spring.profiles: ssl-bhitsqaapp02
-spring.profiles.include: ssl
-server:
-  ssl:
-    key-store: /java/tomcat_ssl.keystore
-    key-store-password: "{cipher}5f49b5acf4f4a042aca3fac3727c1f5c3e665c0b2756afca2e33af9e50ca6e29"
----
-spring.profiles: ssl-bhitsqaapplnx01
-spring.profiles.include: ssl
-server:
-  ssl:
-    key-store: /java/keystore/linuxqa.keystore
-    key-store-password: "{cipher}5f49b5acf4f4a042aca3fac3727c1f5c3e665c0b2756afca2e33af9e50ca6e29"

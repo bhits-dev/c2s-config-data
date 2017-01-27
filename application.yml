@@ -1,21 +1,5 @@
-# secure management endpoints
 management:
-  security:
-    enabled: true
-    sessions: stateless
-    role: ADMIN
-    # forward compatibility
-    roles: ${management.security.role}
   context-path: /management
-security:
-  basic:
-    enabled: true
-    path: ${management.context-path}/**
-  user:
-    name: "{cipher}bf82b6e12915fa6cdc4a06134bd0b3dde3c44ff7c20b88ba457f3bdb4358e74d"
-    password: "{cipher}889a5814b044285a601d8e0bf2f44d37f7b8db8878cca0aac5e601afedb200e2"
-    role: ${management.security.role}
-  sessions: ${management.security.sessions}
 ---
 spring.profiles: oauth2-resource-default
 security:

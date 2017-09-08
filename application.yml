@@ -1,5 +1,8 @@
 management:
   context-path: /management
+security:
+  basic:
+    path: ${management.context-path}/**
 ---
 spring.profiles: oauth2-resource-default
 security:
